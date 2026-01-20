@@ -45,28 +45,43 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
-/**
- * TODO: TASK T4
- *
- * Layout requirements:
- * - Build a standalone section titled "Sport".
- * - The section MUST use: id="t4SeoImageGrid".
- * - Render 2 items in a 2-column layout.
- * - Each item should include (top → bottom):
- *   - Image
- *   - Headline
- *   - Formatted date
- * - The card or headline should be clickable (link to item.link).
- *
- * Data usage:
- * - Use the provided mock data (do not hardcode titles/dates/urls).
- * - Use item.imageUrl as the image src.
- * - Format item.lastPublished as a readable date.
- * - Each image MUST use: id="t4Image-<item.id>".
- *
- * Keep the markup semantic and clean. No external UI libraries.
- */
-
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGridTitle">
+      <h2 id="t4SeoImageGridTitle">Sport</h2>
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}
+      >
+        {T4_MOCK_DATA.map(item => (
+          <article key={item.id}>
+            <a
+              href={item.link}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={`${item.title}. Published on ${new Date(
+                  item.lastPublished,
+                ).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}.`}
+                style={{ width: '100%', height: 'auto' }}
+              />
+              <h3>{item.title}</h3>
+              <time dateTime={item.lastPublished}>
+                {new Date(item.lastPublished).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
