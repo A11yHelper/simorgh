@@ -15,6 +15,7 @@ import IndexHeading from '#containers/IndexHeading';
 import IndexPageContainer from '#components/PageLayout/IndexPageContainer';
 import MostRead from '../../components/MostRead/Canonical';
 import TopStories from '../../components/MostRead/TopStories';
+import A11yTaskEvaluator from '../../components/A11yTaskEvaluator';
 import ATIAnalytics from '../../components/ATIAnalytics';
 import ChartbeatAnalytics from '../../components/ChartbeatAnalytics';
 import MetadataContainer from '../../components/Metadata';
@@ -133,6 +134,10 @@ const MostReadPage = ({ pageData }) => {
         <IndexPageContainer>
           <MostReadWrapper header={header}>
             <TopStories data={pageData} />
+            <A11yTaskEvaluator
+              taskId="T3"
+              enabled={process.env.NODE_ENV !== 'production'}
+            />
             <MostRead data={pageData} columnLayout="oneColumn" size="default" />
           </MostReadWrapper>
         </IndexPageContainer>

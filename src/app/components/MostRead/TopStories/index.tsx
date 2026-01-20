@@ -10,7 +10,7 @@ interface TopStoriesProps {
  * Layout requirements:
  * - A standalone container with the title "Top Stories".
  * - The container MUST use: id="topStories".
- * - Display the first 2 items from data.items in a vertical list.
+ * - Display the first 3 items from data.items in a vertical list.
  * - Each item should include:
  *   - A clickable link showing the story title.
  *   - A date shown below the title.
