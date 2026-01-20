@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from '@emotion/react';
 
 type MostReadSeoItem = {
   id: string;
@@ -45,28 +46,83 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
-/**
- * TODO: TASK T4
- *
- * Layout requirements:
- * - Build a standalone section titled "Sport".
- * - The section MUST use: id="t4SeoImageGrid".
- * - Render 2 items in a 2-column layout.
- * - Each item should include (top → bottom):
- *   - Image
- *   - Headline
- *   - Formatted date
- * - The card or headline should be clickable (link to item.link).
- *
- * Data usage:
- * - Use the provided mock data (do not hardcode titles/dates/urls).
- * - Use item.imageUrl as the image src.
- * - Format item.lastPublished as a readable date.
- * - Each image MUST use: id="t4Image-<item.id>".
- *
- * Keep the markup semantic and clean. No external UI libraries.
- */
+const sectionStyles = {
+  margin: '2rem 0',
+};
+
+const headingStyles = {
+  fontSize: '1.5rem',
+  fontWeight: 700,
+  marginBottom: '1rem',
+};
+
+const gridStyles = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1.5rem',
+};
+
+const cardStyles = {
+  background: '#fff',
+  borderRadius: '0.5rem',
+  overflow: 'hidden',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+  textDecoration: 'none',
+  color: 'inherit',
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+};
+
+const imageStyles = {
+  width: '100%',
+  height: 'auto',
+  display: 'block',
+};
+
+const headlineStyles = {
+  fontSize: '1rem',
+  fontWeight: 600,
+  margin: '1rem 1rem 0.5rem 1rem',
+  lineHeight: 1.3,
+};
+
+const dateStyles = {
+  fontSize: '0.875rem',
+  color: '#555',
+  margin: '0 1rem 1rem 1rem',
+};
+
+const formatDate = (isoString: string) =>
+  new Date(isoString).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" css={sectionStyles}>
+      <h2 css={headingStyles}>Sport</h2>
+      <div css={gridStyles}>
+        {T4_MOCK_DATA.map(item => (
+          <a
+            key={item.id}
+            href={item.link}
+            css={cardStyles}
+            aria-label={item.title}
+          >
+            <img
+              id={`t4Image-${item.id}`}
+              src={item.imageUrl.replace('{width}', '464')}
+              alt={item.imageAlt || item.title}
+              css={imageStyles}
+            />
+            <div css={headlineStyles}>{item.title}</div>
+            <div css={dateStyles}>{formatDate(item.lastPublished)}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
 }
