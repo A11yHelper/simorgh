@@ -1,7 +1,13 @@
+'use client';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import type { EvaluationResult, Props, TaskId } from './types';
 import Panel from './Panel';
 import { getEvaluator, getMultiPanelTitle, getPanelTitle } from './registry';
+
+function uniq<T>(arr: T[]) {
+  return Array.from(new Set(arr));
+}
 
 export default function A11yTaskEvaluator(props: Props) {
   const {
@@ -10,8 +16,14 @@ export default function A11yTaskEvaluator(props: Props) {
     t4ContainerSelector = '#t4SeoImageGrid',
   } = props;
 
+  // 1) ensure SSR output is stable: render nothing until mounted
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  // 2) derive task ids safely (no undefined)
   const taskIds: TaskId[] = useMemo(() => {
-    return 'taskIds' in props ? props?.taskIds || [] : [props?.taskId];
+    const raw = 'taskIds' in props ? props?.taskIds : [props?.taskId];
+    return uniq(raw!.filter(Boolean)) as TaskId[];
   }, [props]);
 
   const [results, setResults] = useState<EvaluationResult[] | null>(null);
@@ -24,7 +36,9 @@ export default function A11yTaskEvaluator(props: Props) {
 
   useEffect(() => {
     if (!enabled) return;
-    if (typeof window === 'undefined') return;
+    if (!mounted) return;
+    if (!open) return;
+    if (taskIds.length === 0) return;
 
     let cancelled = false;
 
@@ -61,9 +75,19 @@ export default function A11yTaskEvaluator(props: Props) {
       cancelled = true;
       window.clearTimeout(t);
     };
-  }, [enabled, taskIds, t3ContainerSelector, t4ContainerSelector]);
+  }, [
+    enabled,
+    mounted,
+    open,
+    taskIds,
+    t3ContainerSelector,
+    t4ContainerSelector,
+  ]);
 
-  if (!enabled || !open) return null;
+  // SSR & before mount: render nothing -> prevents hydration mismatch
+  if (!mounted) return null;
+
+  if (!enabled || !open || taskIds.length === 0) return null;
 
   return (
     <Panel
