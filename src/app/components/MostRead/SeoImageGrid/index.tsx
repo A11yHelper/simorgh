@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from '@emotion/react';
 
 type MostReadSeoItem = {
   id: string;
@@ -45,6 +46,65 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
+const sectionStyles = {
+  margin: '2rem 0',
+};
+
+const titleStyles = {
+  fontSize: '1.5rem',
+  fontWeight: 700,
+  marginBottom: '1rem',
+};
+
+const gridStyles = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1rem',
+};
+
+const cardStyles = {
+  background: '#fff',
+  borderRadius: '0.5rem',
+  overflow: 'hidden',
+  textDecoration: 'none',
+  color: 'inherit',
+  display: 'flex',
+  flexDirection: 'column',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+  transition: 'box-shadow 0.2s',
+  ':hover': {
+    boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+  },
+};
+
+const imageStyles = {
+  width: '100%',
+  height: 'auto',
+  aspectRatio: '16/9',
+  objectFit: 'cover',
+  display: 'block',
+};
+
+const headlineStyles = {
+  fontSize: '1rem',
+  fontWeight: 600,
+  margin: '0.75rem 1rem 0.25rem 1rem',
+  lineHeight: 1.3,
+};
+
+const dateStyles = {
+  fontSize: '0.875rem',
+  color: '#555',
+  margin: '0 1rem 1rem 1rem',
+};
+
+const formatDate = (isoString: string) =>
+  new Date(isoString).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+
 /**
  * TODO: TASK T4
  *
@@ -68,5 +128,30 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" css={sectionStyles}>
+      <h2 css={titleStyles}>Sport</h2>
+      <div css={gridStyles}>
+        {T4_MOCK_DATA.slice(0, 2).map(item => (
+          <a
+            key={item.id}
+            href={item.link}
+            css={cardStyles}
+            aria-label={item.title}
+          >
+            <img
+              id={`t4Image-${item.id}`}
+              src={item.imageUrl.replace('{width}', '464')}
+              alt={item.imageAlt || item.title}
+              css={imageStyles}
+            />
+            <div css={headlineStyles}>{item.title}</div>
+            <time css={dateStyles} dateTime={item.lastPublished}>
+              {formatDate(item.lastPublished)}
+            </time>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
 }
