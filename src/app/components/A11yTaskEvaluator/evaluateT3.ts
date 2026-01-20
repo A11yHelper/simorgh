@@ -1,5 +1,3 @@
-// src/app/components/A11yTaskEvaluator/tasks/t3.ts
-
 import axe from 'axe-core';
 import type { EvaluationResult, Finding, Score } from './types';
 import { getReasonableSelector } from './selectors';

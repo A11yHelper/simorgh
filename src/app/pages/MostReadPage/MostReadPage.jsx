@@ -15,6 +15,7 @@ import IndexHeading from '#containers/IndexHeading';
 import IndexPageContainer from '#components/PageLayout/IndexPageContainer';
 import MostRead from '../../components/MostRead/Canonical';
 import TopStories from '../../components/MostRead/TopStories';
+import SeoImageGrid from '../../components/MostRead/SeoImageGrid';
 import A11yTaskEvaluator from '../../components/A11yTaskEvaluator';
 import ATIAnalytics from '../../components/ATIAnalytics';
 import ChartbeatAnalytics from '../../components/ChartbeatAnalytics';
@@ -134,8 +135,9 @@ const MostReadPage = ({ pageData }) => {
         <IndexPageContainer>
           <MostReadWrapper header={header}>
             <TopStories data={pageData} />
+            <SeoImageGrid />
             <A11yTaskEvaluator
-              taskId="T3"
+              taskIds={['T3', 'T4']}
               enabled={process.env.NODE_ENV !== 'production'}
             />
             <MostRead data={pageData} columnLayout="oneColumn" size="default" />

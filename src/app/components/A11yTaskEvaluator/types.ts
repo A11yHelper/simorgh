@@ -1,3 +1,4 @@
+// types.ts
 export type TaskId = 'T3' | 'T4';
 export type Score = 0 | 1 | 2;
 
@@ -16,18 +17,26 @@ export type EvaluationResult = {
   meta: Record<string, string | number | boolean>;
 };
 
-export type Props = {
-  taskId: TaskId;
-  /** optional override; defaults match your TopStories sample */
-  t3ContainerSelector?: string; // default "#topStories"
-  /** show/hide panel */
-  enabled?: boolean;
-};
-
 export type EvaluatorContext = {
   t3ContainerSelector: string;
+  t4ContainerSelector: string; // NEW
 };
 
-export type TaskEvaluator = (
-  ctx: EvaluatorContext,
-) => Promise<EvaluationResult>;
+export type TaskEvaluator = (ctx: EvaluatorContext) => Promise<EvaluationResult>;
+
+// 兼容旧用法：taskId 单个；新增 taskIds 多个
+export type Props =
+  | {
+      enabled?: boolean;
+      taskId: TaskId;
+      taskIds?: never;
+      t3ContainerSelector?: string;
+      t4ContainerSelector?: string;
+    }
+  | {
+      enabled?: boolean;
+      taskIds: TaskId[];
+      taskId?: never;
+      t3ContainerSelector?: string;
+      t4ContainerSelector?: string;
+    };
