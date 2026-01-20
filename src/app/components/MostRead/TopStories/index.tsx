@@ -1,3 +1,4 @@
+import React from 'react';
 import { MostReadData } from '../types';
 
 interface TopStoriesProps {
@@ -5,26 +6,29 @@ interface TopStoriesProps {
 }
 
 /**
- * TODO: TASK T3: Implement the "Top Stories" section.
- *
- * Layout requirements:
- * - A standalone container with the title "Top Stories".
- * - The container MUST use: id="topStories".
- * - Display the first 3 items from data.items in a vertical list.
- * - Each item should include:
- *   - A clickable link showing the story title.
- *   - A date shown below the title.
- *
- * Data usage:
- * - Use item.href for the link.
- * - Use item.title as the link text.
- * - Format item.timestamp as a readable date.
- *
- * Do not hardcode content; render everything from props.data.
+ * Component: TopStories
+ * Renders the "Top Stories" section with accessibility and usability in mind.
  */
-
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  return (
+    <section id="topStories" aria-labelledby="topStoriesTitle">
+      <h2 id="topStoriesTitle">Top Stories</h2>
+      <ol>
+        {data.items.slice(0, 3).map((item, index) => (
+          <li key={index}>
+            <a href={item.href}>{item.title}</a>
+            <time dateTime={new Date(item.timestamp).toISOString()}>
+              {new Date(item.timestamp).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
 };
 
 export default TopStories;
