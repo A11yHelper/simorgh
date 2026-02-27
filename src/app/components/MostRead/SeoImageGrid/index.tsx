@@ -68,5 +68,27 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGridHeading">
+      <h2 id="t4SeoImageGridHeading">Sport</h2>
+      <ul style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', listStyle: 'none', padding: 0, margin: 0 }}>
+        {T4_MOCK_DATA.slice(0, 2).map(item => (
+          <li key={item.id}>
+            <a href={item.link} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl.replace('{width}', '320')}
+                alt={item.imageAlt && item.imageAlt.trim() ? item.imageAlt : item.title}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+              <h3 style={{ margin: '0.5rem 0 0.25rem' }}>{item.title}</h3>
+              <time dateTime={item.lastPublished}>
+                {new Date(item.lastPublished).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
