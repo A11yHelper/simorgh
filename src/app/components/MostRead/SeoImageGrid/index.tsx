@@ -45,28 +45,56 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
-/**
- * TODO: TASK T4
- *
- * Layout requirements:
- * - Build a standalone section titled "Sport".
- * - The section MUST use: id="t4SeoImageGrid".
- * - Render 2 items in a 2-column layout.
- * - Each item should include (top → bottom):
- *   - Image
- *   - Headline
- *   - Formatted date
- * - The card or headline should be clickable (link to item.link).
- *
- * Data usage:
- * - Use the provided mock data (do not hardcode titles/dates/urls).
- * - Use item.imageUrl as the image src.
- * - Format item.lastPublished as a readable date.
- * - Each image MUST use: id="t4Image-<item.id>".
- *
- * Keep the markup semantic and clean. No external UI libraries.
- */
+function formatDate(iso: string) {
+  const date = new Date(iso);
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading">
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+      <ul
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '1rem',
+          listStyle: 'none',
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        {T4_MOCK_DATA.slice(0, 2).map(item => (
+          <li key={item.id}>
+            <a
+              href={item.link}
+              style={{
+                display: 'block',
+                textDecoration: 'none',
+                color: 'inherit',
+                borderRadius: '4px',
+                outline: 'none',
+                boxShadow: '0 0 0 2px transparent',
+              }}
+            >
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl.replace('{width}', '320')}
+                alt={item.imageAlt && item.imageAlt.trim() ? item.imageAlt : item.title}
+                style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '4px 4px 0 0' }}
+              />
+              <h3 style={{ fontSize: '1rem', margin: '0.5em 0 0.25em' }}>{item.title}</h3>
+              <time dateTime={item.lastPublished} style={{ fontSize: '0.9em', color: '#555' }}>
+                {formatDate(item.lastPublished)}
+              </time>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
