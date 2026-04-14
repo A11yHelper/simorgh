@@ -23,7 +23,7 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
     lastPublished: '2025-02-13T10:52:48.687Z',
     link: 'https://www.bbc.com/pidgin/articles/cq8k9lqxyd8o',
     imageUrl:
-      'https://ichef.bbci.co.uk/ace/ws/{width}/cpsprodpb/faf5/live/6452c2b0-e9e6-11ef-a319-fb4e7360c4ec.jpg.webp',
+      'https://ichef.bbci.co.uk/ace/ws/594/cpsprodpb/faf5/live/6452c2b0-e9e6-11ef-a319-fb4e7360c4ec.jpg.webp',
     description:
       'Di two-leg Champions League knockout phase play-offs start dis week, Manchester City and Real Madrid dey among di 16 teams wey don dey hope to reach di last 16.',
     imageAlt: '',
@@ -37,7 +37,7 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
     lastPublished: '2025-02-10T10:00:48.820Z',
     link: 'https://www.bbc.com/pidgin/articles/cew5rdyv8xno',
     imageUrl:
-      'https://ichef.bbci.co.uk/ace/ws/{width}/cpsprodpb/afed/live/c4059be0-e795-11ef-bd1b-d536627785f2.jpg.webp',
+      'https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/6818/live/27d31820-e78f-11ef-bd1b-d536627785f2.jpg.webp',
     description:
       'Oda stars wey show for New Orleans include Jay-Z, Blue Ivy, Samuel L Jackson and Bradley Cooper.',
     imageAlt: '',
