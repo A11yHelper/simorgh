@@ -28,6 +28,8 @@ export default function A11yTaskEvaluator(props: Props) {
 
   const [results, setResults] = useState<EvaluationResult[] | null>(null);
   const [open, setOpen] = useState(true);
+  const showAxePanel =
+    mounted && new URLSearchParams(window.location.search).get('axe') === '1';
 
   const panelTitle = useMemo(() => {
     if (taskIds.length === 1) return getPanelTitle(taskIds[0]);
@@ -37,6 +39,7 @@ export default function A11yTaskEvaluator(props: Props) {
   useEffect(() => {
     if (!enabled) return;
     if (!mounted) return;
+    if (!showAxePanel) return;
     if (!open) return;
     if (taskIds.length === 0) return;
 
@@ -78,6 +81,7 @@ export default function A11yTaskEvaluator(props: Props) {
   }, [
     enabled,
     mounted,
+    showAxePanel,
     open,
     taskIds,
     t3ContainerSelector,
@@ -87,7 +91,7 @@ export default function A11yTaskEvaluator(props: Props) {
   // SSR & before mount: render nothing -> prevents hydration mismatch
   if (!mounted) return null;
 
-  if (!enabled || !open || taskIds.length === 0) return null;
+  if (!enabled || !showAxePanel || !open || taskIds.length === 0) return null;
 
   return (
     <Panel
