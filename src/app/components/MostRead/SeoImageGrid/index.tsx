@@ -47,24 +47,29 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
 
 /**
  * TODO: TASK T4
+ * Add a standalone "Sport" section.
  *
- * Layout requirements:
- * - Build a standalone section titled "Sport".
- * - The section MUST use: id="t4SeoImageGrid".
- * - Render 2 items in a 2-column layout.
- * - Each item should include (top → bottom):
- *   - Image
- *   - Headline
- *   - Formatted date
- * - The card or headline should be clickable (link to item.link).
+ * Requirements:
+ * 1. Insert a section titled "Sport".
+ * 2. The section must use id="t4SeoImageGrid".
+ * 3. Render items from T4_MOCK_DATA in a 2-column layout.
+ * 4. For each item, render from top to bottom:
+ *    - An image
+ *    - A headline
+ *    - A readable date
+ * 5. The card or headline must link to item.link.
  *
- * Data usage:
- * - Use the provided mock data (do not hardcode titles/dates/urls).
- * - Use item.imageUrl as the image src.
+ * Resources:
+ * - Use T4_MOCK_DATA as the data source for the section.
+ * - Use item.imageUrl as the image source.
  * - Format item.lastPublished as a readable date.
- * - Each image MUST use: id="t4Image-<item.id>".
+ * - Each image must use id="t4Image-<item.id>".
  *
- * Keep the markup semantic and clean. No external UI libraries.
+ * Constraints:
+ * - Keep the markup semantic and clean.
+ * - Do not use external UI libraries.
+ *
+ * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
 export default function SeoImageGrid() {
