@@ -72,6 +72,52 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid">
+      <h2>Sport</h2>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '1rem',
+        }}
+      >
+        {T4_MOCK_DATA.map(item => (
+          <a
+            key={item.id}
+            href={item.link}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              textDecoration: 'none',
+              color: 'inherit',
+            }}
+          >
+            {/* a11y-helper TODO: Provide meaningful alt text for each image or mark as decorative if appropriate */}
+            <img
+              id={`t4Image-${item.id}`}
+              src={item.imageUrl}
+              alt={item.imageAlt}
+              style={{ width: '100%', height: 'auto' }}
+            />
+            <span style={{ fontWeight: 'bold', marginTop: '0.5rem' }}>
+              {item.title}
+            </span>
+            <span style={{ fontSize: '0.9rem', color: '#555' }}>
+              {formatDate(item.lastPublished)}
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
 }

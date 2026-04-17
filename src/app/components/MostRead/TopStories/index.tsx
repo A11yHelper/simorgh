@@ -25,8 +25,29 @@ interface TopStoriesProps {
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const formatDate = (timestamp: number) =>
+  new Date(timestamp).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const topItems = data.items.slice(0, 3);
+
+  return (
+    <section id="topStories">
+      <h2>Top Stories</h2>
+      <ol>
+        {topItems.map(item => (
+          <li key={item.href}>
+            <a href={item.href}>{item.title}</a>
+            <div>{formatDate(item.timestamp)}</div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
 };
 
 export default TopStories;
