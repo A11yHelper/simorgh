@@ -21,12 +21,27 @@ interface TopStoriesProps {
  * - Use item.title for the link text.
  * - Format item.timestamp as a readable date.
  * - Do not hardcode content; render everything from props.data.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  return (
+    <section id="topStories" aria-labelledby="topStoriesTitle">
+      <h2 id="topStoriesTitle">Top Stories</h2>
+      <ol>
+        {data.items.slice(0, 3).map((item, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <li key={index}>
+            <a href={item.href}>{item.title}</a>
+            <p>
+              {new Date(item.timestamp).toLocaleDateString(undefined, {
+                dateStyle: 'long',
+              })}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
 };
 
 export default TopStories;
