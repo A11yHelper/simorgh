@@ -1,6 +1,6 @@
-import axe from 'axe-core';
 import type { EvaluationResult, Finding, Score } from './types';
 import { getReasonableSelector } from './selectors';
+import { runAxeSerially } from './axeRunner';
 
 /**
  * T4: Adding alt-text (Enhance Image for SEO)
@@ -193,7 +193,7 @@ async function evaluateT4(
   }
 
   // Run axe-core and capture image-alt issues as strong evidence
-  const axeResults = await axe.run(container, {
+  const axeResults = await runAxeSerially(container, {
     runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] },
     resultTypes: ['violations'],
   });

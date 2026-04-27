@@ -1,6 +1,6 @@
-import axe from 'axe-core';
 import type { EvaluationResult, Finding, Score } from './types';
 import { getReasonableSelector } from './selectors';
+import { runAxeSerially } from './axeRunner';
 
 async function evaluateT3(
   containerSelector: string,
@@ -46,7 +46,7 @@ async function evaluateT3(
 
   // 1) Run axe-core and capture link-name issues as strong evidence of "missing"
   //    (This aligns with using axe-core as an objective WCAG failure collector.)
-  const axeResults = await axe.run(container, {
+  const axeResults = await runAxeSerially(container, {
     runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] },
     resultTypes: ['violations'],
   });
