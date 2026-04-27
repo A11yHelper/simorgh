@@ -72,6 +72,93 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const sectionStyle = {
+  margin: '2rem 0',
+  padding: '1.5rem',
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+};
+
+const titleStyle = {
+  fontSize: '1.5rem',
+  fontWeight: 700,
+  marginBottom: '1.5rem',
+};
+
+const gridStyle = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1.5rem',
+  padding: 0,
+  margin: 0,
+};
+
+const cardStyle = {
+  background: '#f7f7f7',
+  borderRadius: '6px',
+  overflow: 'hidden',
+  textAlign: 'left',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+};
+
+const imageStyle = {
+  width: '100%',
+  height: 'auto',
+  display: 'block',
+  aspectRatio: '16/9',
+  objectFit: 'cover',
+};
+
+const headlineStyle = {
+  color: '#005bbc',
+  textDecoration: 'none',
+  fontWeight: 600,
+  fontSize: '1.1rem',
+  margin: '1rem 1rem 0.5rem 1rem',
+  ':hover': { textDecoration: 'underline' },
+};
+
+const dateStyle = {
+  color: '#666',
+  fontSize: '0.95rem',
+  margin: '0 1rem 1rem 1rem',
+};
+
+const formatDate = (iso: string) => {
+  const date = new Date(iso);
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" css={sectionStyle}>
+      <h2 css={titleStyle}>Sport</h2>
+      <ul css={gridStyle}>
+        {T4_MOCK_DATA.map(item => (
+          <li key={item.id} css={cardStyle}>
+            <a href={item.link} style={{ display: 'block' }}>
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt || item.title}
+                css={imageStyle}
+              />
+            </a>
+            <a href={item.link} css={headlineStyle}>
+              {item.title}
+            </a>
+            <span css={dateStyle}>{formatDate(item.lastPublished)}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }

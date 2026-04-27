@@ -1,8 +1,5 @@
+import { css } from '@emotion/react';
 import { MostReadData } from '../types';
-
-interface TopStoriesProps {
-  data: MostReadData;
-}
 
 /**
  * TODO: TASK T3
@@ -25,8 +22,76 @@ interface TopStoriesProps {
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+interface TopStoriesProps {
+  data: MostReadData;
+}
+
+const containerStyle = {
+  margin: '2rem 0',
+  padding: '1.5rem',
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+};
+
+const titleStyle = {
+  fontSize: '1.5rem',
+  fontWeight: 700,
+  marginBottom: '1rem',
+};
+
+const listStyle = {
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+};
+
+const itemStyle = {
+  marginBottom: '1.5rem',
+  ':last-of-type': { marginBottom: 0 },
+};
+
+const linkStyle = {
+  color: '#005bbc',
+  textDecoration: 'none',
+  fontSize: '1.1rem',
+  fontWeight: 600,
+  ':hover': { textDecoration: 'underline' },
+};
+
+const dateStyle = {
+  display: 'block',
+  color: '#666',
+  fontSize: '0.95rem',
+  marginTop: '0.3rem',
+};
+
+const formatDate = (timestamp: number) => {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const topItems = data.items.slice(0, 3);
+  return (
+    <section id="topStories" css={containerStyle}>
+      <h2 css={titleStyle}>Top Stories</h2>
+      <ul css={listStyle}>
+        {topItems.map(item => (
+          <li key={item.href} css={itemStyle}>
+            <a href={item.href} css={linkStyle}>
+              {item.title}
+            </a>
+            <span css={dateStyle}>{formatDate(item.timestamp)}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;
