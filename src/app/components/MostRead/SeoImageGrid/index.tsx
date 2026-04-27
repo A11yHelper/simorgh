@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from '@emotion/react';
 
 type MostReadSeoItem = {
   id: string;
@@ -72,6 +73,89 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const gridStyles = css({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1.5rem',
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+});
+
+const cardStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  textDecoration: 'none',
+  color: 'inherit',
+  borderRadius: 4,
+  overflow: 'hidden',
+  outline: 'none',
+  ':focus-visible': {
+    boxShadow: '0 0 0 3px #005bbc',
+  },
+});
+
+const imageStyles = css({
+  width: '100%',
+  height: 'auto',
+  display: 'block',
+});
+
+const headlineStyles = css({
+  fontSize: '1.1rem',
+  fontWeight: 600,
+  margin: '0.5rem 0 0.25rem',
+});
+
+const dateStyles = css({
+  fontSize: '0.95rem',
+  color: '#555',
+  marginBottom: '0.5rem',
+});
+
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading">
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+      <ul css={gridStyles}>
+        {T4_MOCK_DATA.map(item => (
+          <li key={item.id}>
+            <a
+              href={item.link}
+              css={cardStyles}
+              tabIndex={0}
+              aria-labelledby={`t4Image-${item.id} t4Headline-${item.id}`}
+            >
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt?.trim() || item.title}
+                css={imageStyles}
+              />
+              <div>
+                <div id={`t4Headline-${item.id}`} css={headlineStyles}>
+                  {item.title}
+                </div>
+                <time
+                  css={dateStyles}
+                  dateTime={new Date(item.lastPublished).toISOString()}
+                >
+                  {formatDate(item.lastPublished)}
+                </time>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
