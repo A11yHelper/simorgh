@@ -1,4 +1,6 @@
-import React from 'react';
+import { use } from 'react';
+import styled from '@emotion/styled';
+import { ServiceContext } from '../../../contexts/ServiceContext';
 
 type MostReadSeoItem = {
   id: string;
@@ -72,6 +74,92 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const Section = styled.section({
+  marginTop: '1.5rem',
+});
+
+const Title = styled.h2({
+  margin: 0,
+});
+
+const Grid = styled.ul({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '1rem',
+  listStyle: 'none',
+  margin: '1rem 0 0',
+  padding: 0,
+});
+
+const Card = styled.article({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+});
+
+const CardLink = styled.a({
+  color: 'inherit',
+  textDecoration: 'none',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.75rem',
+  height: '100%',
+});
+
+const Image = styled.img({
+  display: 'block',
+  width: '100%',
+  height: 'auto',
+  objectFit: 'cover',
+});
+
+const Headline = styled.h3({
+  margin: 0,
+});
+
+const DateText = styled.time({
+  display: 'block',
+});
+
+const formatReadableDate = (timestamp: string, locale: string) =>
+  new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(timestamp));
+
 export default function SeoImageGrid() {
-  return null;
+  const { datetimeLocale, serviceDatetimeLocale } = use(ServiceContext);
+
+  const locale = serviceDatetimeLocale || datetimeLocale;
+
+  return (
+    <Section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGridHeading">
+      <Title id="t4SeoImageGridHeading">Sport</Title>
+      <Grid>
+        {T4_MOCK_DATA.map(item => {
+          const readableDate = formatReadableDate(item.lastPublished, locale);
+          const altText = `${item.title}. ${item.description} Published ${readableDate}.`;
+
+          return (
+            <li key={item.id}>
+              <Card>
+                <CardLink href={item.link}>
+                  <Image
+                    id={`t4Image-${item.id}`}
+                    src={item.imageUrl}
+                    alt={altText}
+                  />
+                  <Headline>{item.title}</Headline>
+                  <DateText dateTime={item.lastPublished}>
+                    {readableDate}
+                  </DateText>
+                </CardLink>
+              </Card>
+            </li>
+          );
+        })}
+      </Grid>
+    </Section>
+  );
 }
