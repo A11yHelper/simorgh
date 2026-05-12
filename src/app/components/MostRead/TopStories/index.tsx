@@ -1,3 +1,4 @@
+import React from 'react';
 import { MostReadData } from '../types';
 
 interface TopStoriesProps {
@@ -26,7 +27,23 @@ interface TopStoriesProps {
  */
 
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  // Extract the first 3 items from data.items
+  const topStories = data.items.slice(0, 3);
+
+  return (
+    <section id="topStories" aria-labelledby="topStoriesTitle">
+      <h2 id="topStoriesTitle">Top Stories</h2>
+      <ul>
+        {topStories.map((item, index) => (
+          <li key={index}>
+            <a href={item.href}>{item.title}</a>
+            {/* Use a consistent date format */}
+            <p>{new Date(item.timestamp).toISOString().split('T')[0]}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;
