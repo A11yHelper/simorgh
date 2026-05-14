@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from '@emotion/react';
 
 type MostReadSeoItem = {
   id: string;
@@ -72,6 +73,100 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const gridStyles = css({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1.5rem',
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+});
+
+const cardLinkStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  background: '#fff',
+  borderRadius: 4,
+  overflow: 'hidden',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+  textDecoration: 'none',
+  color: 'inherit',
+  minHeight: 0,
+  '&:hover, &:focus': {
+    boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+    outline: '2px solid #005bbc',
+    outlineOffset: '2px',
+    textDecoration: 'none',
+  },
+});
+
+const imageStyles = css({
+  width: '100%',
+  aspectRatio: '16/9',
+  objectFit: 'cover',
+  display: 'block',
+});
+
+const contentStyles = css({
+  padding: '0.75rem 1rem 1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
+});
+
+const headlineStyles = css({
+  fontSize: '1rem',
+  fontWeight: 600,
+  margin: '0 0 0.5rem 0',
+  color: '#222',
+  lineHeight: 1.3,
+});
+
+const dateStyles = css({
+  fontSize: '0.875rem',
+  color: '#666',
+  marginTop: 'auto',
+});
+
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading">
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+      <ul css={gridStyles}>
+        {T4_MOCK_DATA.map(item => (
+          <li key={item.id}>
+            <a
+              href={item.link}
+              css={cardLinkStyles}
+              aria-labelledby={`t4Headline-${item.id}`}
+            >
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt?.trim() ? item.imageAlt : ''}
+                css={imageStyles}
+              />
+              <div css={contentStyles}>
+                <span id={`t4Headline-${item.id}`} css={headlineStyles}>
+                  {item.title}
+                </span>
+                <time dateTime={item.lastPublished} css={dateStyles}>
+                  {formatDate(item.lastPublished)}
+                </time>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }

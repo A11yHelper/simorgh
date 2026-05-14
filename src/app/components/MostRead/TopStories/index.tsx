@@ -25,8 +25,36 @@ interface TopStoriesProps {
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const formatDate = (timestamp: string | number) => {
+  // Formats as "D MMM YYYY", e.g., "5 Jun 2024"
+  const date = new Date(timestamp);
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const topItems = data.items.slice(0, 3);
+
+  return (
+    <section id="topStories" aria-labelledby="topStories-heading">
+      <h2 id="topStories-heading">Top Stories</h2>
+      <ol>
+        {topItems.map(item => (
+          <li key={item.href}>
+            <a href={item.href}>{item.title}</a>
+            <div>
+              <time dateTime={new Date(item.timestamp).toISOString()}>
+                {formatDate(item.timestamp)}
+              </time>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
 };
 
 export default TopStories;
