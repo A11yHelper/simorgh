@@ -26,7 +26,7 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
       'https://ichef.bbci.co.uk/ace/ws/594/cpsprodpb/faf5/live/6452c2b0-e9e6-11ef-a319-fb4e7360c4ec.jpg.webp',
     description:
       'Di two-leg Champions League knockout phase play-offs start dis week, Manchester City and Real Madrid dey among di 16 teams wey don dey hope to reach di last 16.',
-    imageAlt: '',
+    imageAlt: 'Real Madrid vs Manchester City match preview',
     id: 'cq8k9lqxyd8o',
   },
   {
@@ -40,7 +40,7 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
       'https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/6818/live/27d31820-e78f-11ef-bd1b-d536627785f2.jpg.webp',
     description:
       'Oda stars wey show for New Orleans include Jay-Z, Blue Ivy, Samuel L Jackson and Bradley Cooper.',
-    imageAlt: '',
+    imageAlt: 'Kendrick Lamar and other celebrities at the Super Bowl',
     id: 'cew5rdyv8xno',
   },
 ];
@@ -73,5 +73,43 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  // Helper function to format date
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="sport-section-heading">
+      <h2 id="sport-section-heading">Sport</h2>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '1rem',
+        }}
+      >
+        {T4_MOCK_DATA.map((item) => (
+          <article key={item.id}>
+            <a href={item.link}>
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt || 'Image related to the article'}
+                style={{ width: '100%', height: 'auto' }}
+              />
+              <h3>{item.title}</h3>
+            </a>
+            <time dateTime={item.lastPublished}>
+              {formatDate(item.lastPublished)}
+            </time>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
