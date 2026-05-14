@@ -1,5 +1,3 @@
-import React from 'react';
-
 type MostReadSeoItem = {
   id: string;
   type: 'article';
@@ -73,5 +71,89 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section
+      id="t4SeoImageGrid"
+      aria-labelledby="t4SeoImageGridTitle"
+      style={{ margin: '2rem 0' }}
+    >
+      <h2 id="t4SeoImageGridTitle" style={{ marginBottom: '1rem' }}>
+        Sport
+      </h2>
+      <div
+        role="list"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '1.5rem',
+        }}
+      >
+        {T4_MOCK_DATA.map(item => (
+          <article
+            key={item.id}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              background: '#fff',
+              borderRadius: 8,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+              overflow: 'hidden',
+              textDecoration: 'none',
+            }}
+          >
+            <a
+              href={item.link}
+              style={{ width: '100%', display: 'block' }}
+              tabIndex={0}
+            >
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt || item.title}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  aspectRatio: '16/9',
+                  objectFit: 'cover',
+                }}
+              />
+            </a>
+            <div style={{ padding: '0.75rem 1rem 1rem 1rem', width: '100%' }}>
+              <a
+                href={item.link}
+                style={{
+                  color: '#0b0c0c',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                  fontSize: '1.1rem',
+                  lineHeight: 1.3,
+                }}
+              >
+                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>
+                  {item.title}
+                </h3>
+              </a>
+              <time
+                dateTime={item.lastPublished}
+                style={{
+                  display: 'block',
+                  marginTop: '0.5rem',
+                  color: '#505050',
+                  fontSize: '0.95rem',
+                }}
+              >
+                {new Date(item.lastPublished).toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
