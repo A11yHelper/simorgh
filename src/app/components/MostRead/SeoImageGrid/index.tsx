@@ -1,6 +1,6 @@
-import React from 'react';
+import { css } from '@emotion/react';
 
-type MostReadSeoItem = {
+export type MostReadSeoItem = {
   id: string;
   type: 'article';
   isLive: boolean;
@@ -45,33 +45,145 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
-/**
- * TODO: TASK T4
- * Add a standalone "Sport" section.
- *
- * Requirements:
- * 1. Insert a section titled "Sport".
- * 2. The section must use id="t4SeoImageGrid".
- * 3. Render items from T4_MOCK_DATA in a 2-column layout.
- * 4. For each item, render from top to bottom:
- *    - An image
- *    - A headline
- *    - A readable date
- * 5. The card or headline must link to item.link.
- *
- * Resources:
- * - Use T4_MOCK_DATA as the data source for the section.
- * - Use item.imageUrl as the image source.
- * - Format item.lastPublished as a readable date.
- * - Each image must use id="t4Image-<item.id>".
- *
- * Constraints:
- * - Keep the markup semantic and clean.
- * - Do not use external UI libraries.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
- */
+const sectionStyles = css({
+  margin: '2rem 0',
+  padding: 0,
+});
+
+const headingStyles = css({
+  fontSize: '1.5rem',
+  fontWeight: 700,
+  marginBottom: '1rem',
+  marginTop: 0,
+  lineHeight: 1.2,
+});
+
+const gridStyles = css({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1.5rem',
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+  '@media (max-width: 600px)': {
+    gridTemplateColumns: '1fr',
+  },
+});
+
+const cardStyles = css({
+  background: '#fff',
+  borderRadius: '0.5rem',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+});
+
+const imageLinkStyles = css({
+  display: 'block',
+  lineHeight: 0,
+  outline: 'none',
+  ':focus-visible': {
+    boxShadow: '0 0 0 3px #005bbc',
+  },
+});
+
+const imageStyles = css({
+  width: '100%',
+  height: 'auto',
+  display: 'block',
+  aspectRatio: '16/9',
+  objectFit: 'cover',
+  background: '#f2f2f2',
+});
+
+const contentStyles = css({
+  padding: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
+});
+
+const headlineStyles = css({
+  fontSize: '1rem',
+  fontWeight: 600,
+  margin: 0,
+  marginBottom: '0.5rem',
+  lineHeight: 1.3,
+  color: '#222',
+});
+
+const linkStyles = css({
+  color: '#005bbc',
+  textDecoration: 'none',
+  ':hover, :focus-visible': {
+    textDecoration: 'underline',
+  },
+});
+
+const dateStyles = css({
+  fontSize: '0.875rem',
+  color: '#666',
+  marginTop: 'auto',
+});
+
+function formatDate(iso: string) {
+  const date = new Date(iso);
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+function getAltText(item: MostReadSeoItem) {
+  if (item.imageAlt?.trim()) return item.imageAlt;
+  if (item.description?.trim()) return item.description;
+  // a11y-helper TODO: Provide descriptive alt text for this image
+  return '';
+}
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section
+      id="t4SeoImageGrid"
+      aria-labelledby="t4SeoImageGrid-heading"
+      css={sectionStyles}
+    >
+      <h2 id="t4SeoImageGrid-heading" css={headingStyles}>
+        Sport
+      </h2>
+      <ul css={gridStyles}>
+        {T4_MOCK_DATA.map(item => (
+          <li key={item.id} css={cardStyles}>
+            <a
+              href={item.link}
+              css={imageLinkStyles}
+              tabIndex={0}
+              aria-labelledby={`t4Headline-${item.id}`}
+            >
+              <img
+                src={item.imageUrl}
+                id={`t4Image-${item.id}`}
+                alt={getAltText(item)}
+                css={imageStyles}
+                loading="lazy"
+              />
+            </a>
+            <div css={contentStyles}>
+              <h3 css={headlineStyles} id={`t4Headline-${item.id}`}>
+                <a href={item.link} css={linkStyles}>
+                  {item.title}
+                </a>
+              </h3>
+              <time dateTime={item.lastPublished} css={dateStyles}>
+                {formatDate(item.lastPublished)}
+              </time>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
