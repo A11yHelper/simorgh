@@ -1,5 +1,3 @@
-import React from 'react';
-
 type MostReadSeoItem = {
   id: string;
   type: 'article';
@@ -72,6 +70,65 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" style={{ margin: '2rem 0' }}>
+      <h2 style={{ marginBottom: '1rem' }}>Sport</h2>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '1.5rem',
+        }}
+      >
+        {T4_MOCK_DATA.map(item => (
+          <a
+            key={item.id}
+            href={item.link}
+            style={{
+              display: 'block',
+              textDecoration: 'none',
+              color: 'inherit',
+              border: '1px solid #eee',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              background: '#fff',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+              transition: 'box-shadow 0.2s',
+            }}
+          >
+            <img
+              id={`t4Image-${item.id}`}
+              src={item.imageUrl}
+              alt={item.imageAlt || item.title}
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                aspectRatio: '16/9',
+                objectFit: 'cover',
+              }}
+            />
+            <div style={{ padding: '1rem' }}>
+              <h3 style={{ fontSize: '1.1rem', margin: '0 0 0.5rem 0' }}>
+                {item.title}
+              </h3>
+              <div style={{ fontSize: '0.95rem', color: '#555' }}>
+                {formatDate(item.lastPublished)}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
 }
