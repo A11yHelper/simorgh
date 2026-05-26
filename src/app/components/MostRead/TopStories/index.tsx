@@ -25,8 +25,57 @@ interface TopStoriesProps {
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const formatDate = (timestamp: number | string) => {
+  const date = new Date(Number(timestamp));
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const topItems = data.items.slice(0, 3);
+
+  return (
+    <section
+      id="topStories"
+      style={{
+        margin: '2rem 0 3rem 0',
+        marginBottom: '3rem', // 拉开与下方Most Read的距离
+        borderBottom: '1px solid #e0e0e0', // 分隔线增强分区感
+        paddingBottom: '2rem', // 分隔线与内容间留白
+      }}
+    >
+      <h2 style={{ marginBottom: '1rem' }}>Top Stories</h2>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {topItems.map(item => (
+          <li key={item.id} style={{ marginBottom: '2rem' }}>
+            <a
+              href={item.href}
+              style={{
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                color: '#0044bb',
+                textDecoration: 'none',
+              }}
+            >
+              {item.title}
+            </a>
+            <div
+              style={{
+                fontSize: '0.95rem',
+                color: '#555',
+                marginTop: '0.25rem',
+              }}
+            >
+              {formatDate(item.timestamp)}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;

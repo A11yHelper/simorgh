@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from '@emotion/react';
 
 type MostReadSeoItem = {
   id: string;
@@ -45,33 +46,91 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
-/**
- * TODO: TASK T4
- * Add a standalone "Sport" section.
- *
- * Requirements:
- * 1. Insert a section titled "Sport".
- * 2. The section must use id="t4SeoImageGrid".
- * 3. Render items from T4_MOCK_DATA in a 2-column layout.
- * 4. For each item, render from top to bottom:
- *    - An image
- *    - A headline
- *    - A readable date
- * 5. The card or headline must link to item.link.
- *
- * Resources:
- * - Use T4_MOCK_DATA as the data source for the section.
- * - Use item.imageUrl as the image source.
- * - Format item.lastPublished as a readable date.
- * - Each image must use id="t4Image-<item.id>".
- *
- * Constraints:
- * - Keep the markup semantic and clean.
- * - Do not use external UI libraries.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
- */
+const sectionStyles = {
+  marginTop: '2rem',
+  marginBottom: '2rem',
+};
+
+const gridStyles = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: '1.5rem',
+};
+
+const cardStyles = {
+  background: '#fff',
+  borderRadius: '0.5rem',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column' as const,
+  minWidth: 0,
+};
+
+const imageStyles = {
+  width: '100%',
+  height: 'auto',
+  display: 'block',
+};
+
+const contentStyles = {
+  padding: '1rem',
+  display: 'flex',
+  flexDirection: 'column' as const,
+  gap: '0.5rem',
+};
+
+const titleStyles = {
+  fontSize: '1rem',
+  fontWeight: 600,
+  margin: 0,
+  color: '#222',
+  textDecoration: 'none',
+  lineHeight: 1.3,
+};
+
+const dateStyles = {
+  fontSize: '0.875rem',
+  color: '#666',
+};
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section
+      id="t4SeoImageGrid"
+      css={sectionStyles}
+      aria-labelledby="t4SeoImageGrid-heading"
+    >
+      <h2 id="t4SeoImageGrid-heading" style={{ marginBottom: '1.5rem' }}>
+        {'    Sport    '}
+      </h2>
+      <div css={gridStyles}>
+        {T4_MOCK_DATA.map(item => (
+          <article key={item.id} css={cardStyles}>
+            <a
+              href={item.link}
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ display: 'block' }}
+            >
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt=""
+                css={imageStyles}
+              />
+            </a>
+            <div css={contentStyles}>
+              <a href={item.link} css={titleStyles}>
+                {item.title}
+              </a>
+              <time dateTime={item.lastPublished} css={dateStyles}>
+                {new Date(item.lastPublished).toLocaleDateString()}
+              </time>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
