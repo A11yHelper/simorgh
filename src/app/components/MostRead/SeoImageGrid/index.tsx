@@ -1,19 +1,4 @@
-import React from 'react';
-
-type MostReadSeoItem = {
-  id: string;
-  type: 'article';
-  isLive: boolean;
-  title: string;
-  firstPublished: string;
-  lastPublished: string;
-  link: string;
-  imageUrl: string;
-  description: string;
-  imageAlt?: string;
-};
-
-export const T4_MOCK_DATA: MostReadSeoItem[] = [
+export const T4_MOCK_DATA = [
   {
     type: 'article',
     isLive: false,
@@ -72,6 +57,79 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+function formatDate(isoString: string) {
+  const date = new Date(isoString);
+  // Example: 2025-02-13T10:52:48.687Z → 13 February 2025
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section
+      id="t4SeoImageGrid"
+      aria-labelledby="t4SeoImageGridTitle"
+      style={{ marginBottom: 40 }}
+    >
+      <h2 id="t4SeoImageGridTitle" style={{ marginBottom: 16 }}>
+        Sport
+      </h2>
+      <div
+        role="list"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 16,
+        }}
+      >
+        {T4_MOCK_DATA.map(item => (
+          <a
+            key={item.id}
+            href={item.link}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              textDecoration: 'none',
+              color: 'inherit',
+              borderRadius: 4,
+              overflow: 'hidden',
+              background: '#fff',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+            }}
+          >
+            <img
+              id={`t4Image-${item.id}`}
+              src={item.imageUrl}
+              alt={item.imageAlt || item.title}
+              style={{
+                width: '100%',
+                aspectRatio: '16/9',
+                objectFit: 'cover',
+                marginBottom: 8,
+              }}
+            />
+            <span
+              style={{
+                fontWeight: 600,
+                fontSize: 16,
+                marginBottom: 4,
+                lineHeight: 1.2,
+              }}
+            >
+              {item.title}
+            </span>
+            <time
+              dateTime={item.lastPublished}
+              style={{ fontSize: 14, color: '#555' }}
+            >
+              {formatDate(item.lastPublished)}
+            </time>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
 }
