@@ -73,5 +73,57 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading">
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+
+      <div
+        role="list"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '1rem',
+          alignItems: 'start',
+        }}
+      >
+        {T4_MOCK_DATA.map(item => {
+          const readableDate = new Date(item.lastPublished).toLocaleDateString(
+            'en-GB',
+            dateOptions,
+          );
+          const titleId = `t4Title-${item.id}`;
+          const imageStyle = {
+            width: '100%',
+            height: '180px',        // choose a height that fits your layout (responsive grid will scale)
+            objectFit: 'cover',     // ensures uniform cropping
+            display: 'block',
+          };
+
+          return (
+            <article key={item.id} role="listitem">
+              {/* Image links to the article and has required id */}
+              <a href={item.link} aria-labelledby={titleId}>
+                <img
+                  id={`t4Image-${item.id}`}
+                  src={item.imageUrl}
+                  alt={item.imageAlt}   // ensure this is a meaningful description in T4_MOCK_DATA
+                  style={imageStyle}
+                />
+              </a>
+
+              {/* Headline (also links) */}
+              <h3 id={titleId} style={{ marginTop: '0.5rem', fontSize: '1rem' }}>
+                <a href={item.link}>{item.title}</a>
+              </h3>
+
+              {/* Readable date */}
+              <time dateTime={item.lastPublished}>{readableDate}</time>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
 }
