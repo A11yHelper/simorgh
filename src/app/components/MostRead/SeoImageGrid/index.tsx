@@ -73,5 +73,59 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  const formatDate = (iso?: string) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    // Use UTC-based fields and a fixed English month list to ensure
+    // server and client produce identical output and avoid locale
+    // differences that break hydration.
+    const day = d.getUTCDate();
+    const month = d.getUTCMonth();
+    const year = d.getUTCFullYear();
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return `${day} ${monthNames[month]} ${year}`;
+  };
+
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading">
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '16px',
+        }}
+      >
+        {T4_MOCK_DATA.map(item => (
+          <article key={item.id}>
+            <a href={item.link} style={{ color: 'inherit', textDecoration: 'none' }}>
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt ?? item.title}
+                style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
+              />
+              <h3 style={{ margin: '8px 0' }}>{item.title}</h3>
+            </a>
+            <time dateTime={item.lastPublished} style={{ color: '#6b6b6b', fontSize: '0.9em' }}>
+              {formatDate(item.lastPublished)}
+            </time>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
