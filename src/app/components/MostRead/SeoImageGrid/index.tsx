@@ -73,5 +73,70 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  const formatDate = iso =>
+    new Date(iso).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+  const styles = {
+    list: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gap: '16px',
+      listStyle: 'none',
+      padding: 0,
+      margin: 0,
+    },
+    cardLink: {
+      display: 'block',
+      color: 'inherit',
+      textDecoration: 'none',
+      borderRadius: 4,
+      padding: '8px',
+    },
+    image: {
+      width: '100%',
+      height: 'auto',
+      display: 'block',
+      borderRadius: 4,
+    },
+    headline: {
+      margin: '8px 0 4px',
+      fontSize: '1rem',
+      lineHeight: 1.2,
+    },
+    date: {
+      color: '#666',
+      fontSize: '0.875rem',
+    },
+  };
+
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading">
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+
+      <ul style={styles.list}>
+        {T4_MOCK_DATA.map(item => (
+          <li key={item.id}>
+            <a href={item.link} style={styles.cardLink}>
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt}
+                style={styles.image}
+              />
+
+              <h3 style={styles.headline}>{item.title}</h3>
+
+              <time dateTime={item.lastPublished} style={styles.date}>
+                {formatDate(item.lastPublished)}
+              </time>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }

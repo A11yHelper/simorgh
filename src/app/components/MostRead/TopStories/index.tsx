@@ -1,32 +1,50 @@
+import React from 'react';
 import { MostReadData } from '../types';
+
+
 
 interface TopStoriesProps {
   data: MostReadData;
 }
 
-/**
- * TODO: TASK T3
- * Add a "Top Stories" section.
- *
- * Requirements:
- * 1. Insert a standalone container with the title "Top Stories".
- * 2. The container must use id="topStories".
- * 3. Display the first 3 items from props.data.items in a vertical list.
- * 4. For each item, render:
- *    - A clickable title link
- *    - A readable date below the title
- *
- * Resources:
- * - Use item.href for the link URL.
- * - Use item.title for the link text.
- * - Format item.timestamp as a readable date.
- * - Do not hardcode content; render everything from props.data.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
- */
-
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const items = data?.items?.slice(0, 3) ?? [];
+
+  return (
+    <section id="topStories" aria-labelledby="topStories-heading">
+      <h2 id="topStories-heading">Top Stories</h2>
+      <ul>
+        {items.map((item, idx) => {
+          const date = item.timestamp ? new Date(item.timestamp) : null;
+          const readable = date
+            ? date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            : '';
+          const datetime = date ? date.toISOString() : undefined;
+
+          return (
+            <li key={item.href ?? idx}>
+              {item.href ? (
+                <a href={item.href} aria-label={item.title ?? 'Read full story'}>
+                  {item.title ?? 'Read full story'}
+                </a>
+              ) : (
+                <span>{item.title ?? 'Untitled story'}</span>
+              )}
+              {readable && (
+                <div>
+                  <time dateTime={datetime}>{readable}</time>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;
