@@ -26,7 +26,49 @@ interface TopStoriesProps {
  */
 
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const items = data?.items?.slice(0, 3) ?? [];
+
+  const formatDate = (iso?: string | number) => {
+    if (iso === undefined || iso === null || iso === '') return '';
+    try {
+      const d = new Date(iso as string | number);
+      if (isNaN(d.getTime())) return String(iso);
+      return d.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+    } catch {
+      return String(iso);
+    }
+  };
+
+  return (
+    <section id="topStories" aria-labelledby="topStories-heading">
+      <h2 id="topStories-heading">Top Stories</h2>
+      <ul>
+        {items.map(item => {
+          const isoDate = (() => {
+            try {
+              const d = new Date(item.timestamp as string | number);
+              return isNaN(d.getTime()) ? String(item.timestamp) : d.toISOString();
+            } catch {
+              return String(item.timestamp);
+            }
+          })();
+
+          return (
+            <li key={item.href}>
+              <a href={item.href}>{item.title}</a>
+              <div>
+                <time dateTime={isoDate}>{formatDate(item.timestamp as string | number)}</time>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;

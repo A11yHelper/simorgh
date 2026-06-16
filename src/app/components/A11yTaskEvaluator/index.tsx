@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { EvaluationResult, Props, TaskId } from './types';
 import Panel from './Panel';
 import { getEvaluator, getMultiPanelTitle, getPanelTitle } from './registry';

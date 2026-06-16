@@ -13,9 +13,9 @@ export function getReasonableSelector(el: Element): string {
     const parent = cur.parentElement;
     if (!parent) break;
 
-    const siblings = Array.from(parent.children).filter(
-      c => c.tagName === cur!.tagName,
-    );
+    const siblings: Element[] = Array.from(
+      parent.children as HTMLCollectionOf<Element>,
+    ).filter((c: Element) => c.tagName === cur!.tagName);
     const idx = siblings.indexOf(cur);
     const part = siblings.length > 1 ? `${tag}:nth-of-type(${idx + 1})` : tag;
     parts.unshift(part);

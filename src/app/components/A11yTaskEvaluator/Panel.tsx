@@ -1,4 +1,3 @@
-import React from 'react';
 import type { EvaluationResult } from './types';
 import styles from './styles';
 import scoreBadgeStyle from './ScoreBadge';
