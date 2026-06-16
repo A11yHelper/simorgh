@@ -26,7 +26,22 @@ interface TopStoriesProps {
  */
 
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  return <div id="topStories">
+    <h2>Top Stories</h2>
+    <ul>
+      {data.items.slice(0, 3).map((item) => (
+        <li key={item.id}>
+          <a href
+            id={`topStoryLink-${item.id}`}
+            href={item.href}
+          >
+            {item.title}
+          </a>
+          <div>{new Date(item.timestamp).toLocaleDateString()}</div>
+        </li>
+      ))}
+    </ul>
+  </div>;
 };
 
 export default TopStories;
