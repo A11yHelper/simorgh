@@ -1,32 +1,40 @@
+import moment from 'moment';
 import { MostReadData } from '../types';
 
 interface TopStoriesProps {
   data: MostReadData;
 }
 
-/**
- * TODO: TASK T3
- * Add a "Top Stories" section.
- *
- * Requirements:
- * 1. Insert a standalone container with the title "Top Stories".
- * 2. The container must use id="topStories".
- * 3. Display the first 3 items from props.data.items in a vertical list.
- * 4. For each item, render:
- *    - A clickable title link
- *    - A readable date below the title
- *
- * Resources:
- * - Use item.href for the link URL.
- * - Use item.title for the link text.
- * - Format item.timestamp as a readable date.
- * - Do not hardcode content; render everything from props.data.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
- */
-
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const items = data?.items?.slice(0, 3) ?? [];
+
+  if (items.length === 0) return null;
+
+  return (
+    <section id="topStories" aria-labelledby="topStories-heading">
+      <h2 id="topStories-heading">Top Stories</h2>
+      <ul>
+        {items.map(item => {
+          // a11y-helper FIXME: Confirm desired date format and locale for display
+          const iso = item.timestamp ? moment(item.timestamp).toISOString() : undefined;
+          const readable = item.timestamp ? moment(item.timestamp).format('D MMMM YYYY') : '';
+
+          const key = (item as any).id ?? item.href ?? item.title;
+
+          return (
+            <li key={key}>
+              <a href={item.href}>{item.title}</a>
+              {iso ? (
+                <div>
+                  <time dateTime={iso}>{readable}</time>
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;

@@ -1,4 +1,6 @@
 import React from 'react';
+import moment from 'moment';
+import { css } from '@emotion/react';
 
 type MostReadSeoItem = {
   id: string;
@@ -45,33 +47,89 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
-/**
- * TODO: TASK T4
- * Add a standalone "Sport" section.
- *
- * Requirements:
- * 1. Insert a section titled "Sport".
- * 2. The section must use id="t4SeoImageGrid".
- * 3. Render items from T4_MOCK_DATA in a 2-column layout.
- * 4. For each item, render from top to bottom:
- *    - An image
- *    - A headline
- *    - A readable date
- * 5. The card or headline must link to item.link.
- *
- * Resources:
- * - Use T4_MOCK_DATA as the data source for the section.
- * - Use item.imageUrl as the image source.
- * - Format item.lastPublished as a readable date.
- * - Each image must use id="t4Image-<item.id>".
- *
- * Constraints:
- * - Keep the markup semantic and clean.
- * - Do not use external UI libraries.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
- */
+const sectionStyles = css({
+  margin: '24px 0',
+});
+
+const headingStyles = css({
+  margin: '0 0 12px 0',
+  fontSize: '1.25rem',
+  lineHeight: 1.2,
+});
+
+const gridStyles = css({
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: '16px',
+  '@media (max-width: 480px)': {
+    gridTemplateColumns: '1fr',
+  },
+});
+
+const cardStyles = css({
+  display: 'block',
+  textDecoration: 'none',
+  color: 'inherit',
+  borderRadius: 4,
+  overflow: 'hidden',
+});
+
+const imageStyles = css({
+  width: '100%',
+  height: 'auto',
+  display: 'block',
+});
+
+const headlineStyles = css({
+  margin: '8px 0 4px 0',
+  fontSize: '1rem',
+  lineHeight: 1.25,
+});
+
+const dateStyles = css({
+  margin: 0,
+  color: '#666',
+  fontSize: '0.875rem',
+});
 
 export default function SeoImageGrid() {
-  return null;
+  const items = T4_MOCK_DATA;
+
+  if (!items || items.length === 0) return null;
+
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading" css={sectionStyles}>
+      <h2 id="t4SeoImageGrid-heading" css={headingStyles}>
+        Sport
+      </h2>
+
+      <ul css={gridStyles}>
+        {items.map(item => {
+          const iso = item.lastPublished ? moment(item.lastPublished).toISOString() : undefined;
+          const readable = item.lastPublished ? moment(item.lastPublished).format('D MMMM YYYY') : '';
+
+          const alt =
+            item.imageAlt && item.imageAlt.trim().length > 0 ? item.imageAlt : '';
+
+          // a11y-helper TODO: Provide descriptive alt text for image id {item.id} if empty.
+          return (
+            <li key={item.id}>
+              <a href={item.link} css={cardStyles}>
+                <img id={`t4Image-${item.id}`} src={item.imageUrl} alt={alt} css={imageStyles} />
+                <h3 css={headlineStyles}>{item.title}</h3>
+              </a>
+              {iso ? (
+                <p css={dateStyles}>
+                  <time dateTime={iso}>{readable}</time>
+                </p>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 }
