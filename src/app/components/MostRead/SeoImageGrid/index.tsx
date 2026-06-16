@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 type MostReadSeoItem = {
   id: string;
@@ -73,5 +74,70 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  const styles = {
+    section: {
+      padding: '0 0 24px 0',
+    },
+    list: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gap: '16px',
+      listStyle: 'none',
+      margin: 0,
+      padding: 0,
+    },
+    item: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      gap: '8px',
+    },
+    img: {
+      width: '100%',
+      height: 'auto',
+      display: 'block',
+    },
+    headline: {
+      margin: 0,
+      fontSize: '1rem',
+      lineHeight: '1.2',
+    },
+    date: {
+      color: '#555',
+      fontSize: '0.875rem',
+    },
+  };
+
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading" style={styles.section}>
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+      <ul style={styles.list}>
+        {T4_MOCK_DATA.map(item => {
+          const readable = moment(item.lastPublished).format('D MMMM YYYY');
+          const dateTime = new Date(item.lastPublished).toISOString();
+
+          return (
+            <li key={item.id} style={styles.item}>
+              <figure style={{ margin: 0 }}>
+                <img
+                  id={`t4Image-${item.id}`}
+                  src={item.imageUrl}
+                  alt={item.imageAlt ?? ''}
+                  style={styles.img}
+                />
+                {/* a11y-helper TODO: Provide a descriptive alt text for this image if it conveys meaningful content */}
+              </figure>
+
+              <h3 style={styles.headline}>
+                <a href={item.link}>{item.title}</a>
+              </h3>
+
+              <div style={styles.date}>
+                <time dateTime={dateTime}>{readable}</time>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 }
