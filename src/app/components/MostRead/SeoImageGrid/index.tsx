@@ -1,5 +1,3 @@
-import React from 'react';
-
 type MostReadSeoItem = {
   id: string;
   type: 'article';
@@ -45,6 +43,16 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
+const formatReadableDate = (timestamp: string) => {
+  const date = new Date(timestamp);
+
+  return new Intl.DateTimeFormat(undefined, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+};
+
 /**
  * TODO: TASK T4
  * Add a standalone "Sport" section.
@@ -73,5 +81,31 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4-seo-image-grid-title">
+      <h2 id="t4-seo-image-grid-title">Sport</h2>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: '1rem',
+        }}
+      >
+        {T4_MOCK_DATA.map(item => (
+          <article key={item.id}>
+            <a href={item.link} style={{ display: 'block' }}>
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt?.trim() || item.title}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+              <h3>{item.title}</h3>
+            </a>
+            <div>{formatReadableDate(item.lastPublished)}</div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
