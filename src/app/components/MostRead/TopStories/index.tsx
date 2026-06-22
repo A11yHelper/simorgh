@@ -26,7 +26,19 @@ interface TopStoriesProps {
  */
 
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  return (
+    <section id="topStories" aria-labelledby="topStories-heading">
+      <h2 id="topStories-heading">Top Stories</h2>
+      <ul>
+        {data.items.slice(0, 3).map(item => (
+          <li key={item.id}>
+            <a href={item.href}>{item.title}</a>
+            <p>{new Date(item.timestamp).toLocaleDateString()}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;
