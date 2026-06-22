@@ -1,32 +1,59 @@
+import React, { useMemo } from 'react';
 import { MostReadData } from '../types';
 
 interface TopStoriesProps {
   data: MostReadData;
+  locale?: string;
 }
 
-/**
- * TODO: TASK T3
- * Add a "Top Stories" section.
- *
- * Requirements:
- * 1. Insert a standalone container with the title "Top Stories".
- * 2. The container must use id="topStories".
- * 3. Display the first 3 items from props.data.items in a vertical list.
- * 4. For each item, render:
- *    - A clickable title link
- *    - A readable date below the title
- *
- * Resources:
- * - Use item.href for the link URL.
- * - Use item.title for the link text.
- * - Format item.timestamp as a readable date.
- * - Do not hardcode content; render everything from props.data.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
- */
+const TopStories = ({ data, locale }: TopStoriesProps) => {
+  const items = data?.items ? data.items.slice(0, 3) : [];
 
-const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const resolvedLocale = useMemo(() => {
+    if (locale) return locale;
+    if (typeof document !== 'undefined' && document.documentElement?.lang) {
+      return document.documentElement.lang;
+    }
+    if (typeof navigator !== 'undefined' && navigator.language) {
+      return navigator.language;
+    }
+    // a sensible default when nothing else is available
+    return 'en-GB';
+  }, [locale]);
+
+  const formatTimestamp = (timestamp?: string | number) => {
+    if (!timestamp) return null;
+    const date = new Date(timestamp);
+    if (Number.isNaN(date.getTime())) return null;
+    const iso = date.toISOString();
+    const readable = new Intl.DateTimeFormat(resolvedLocale, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(date);
+    return { iso, readable };
+  };
+
+  return (
+    <section id="topStories" aria-labelledby="topStories-heading">
+      <h2 id="topStories-heading">Top Stories</h2>
+      <ul>
+        {items.map((item, index) => {
+          const formatted = formatTimestamp(item.timestamp);
+          return (
+            <li key={`${item.href}-${index}`}>
+              <a href={item.href}>{item.title}</a>
+              {formatted ? (
+                <div>
+                  <time dateTime={formatted.iso}>{formatted.readable}</time>
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;

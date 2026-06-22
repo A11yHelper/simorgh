@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { css } from '@emotion/react';
 
 type MostReadSeoItem = {
   id: string;
@@ -26,7 +27,7 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
       'https://ichef.bbci.co.uk/ace/ws/594/cpsprodpb/faf5/live/6452c2b0-e9e6-11ef-a319-fb4e7360c4ec.jpg.webp',
     description:
       'Di two-leg Champions League knockout phase play-offs start dis week, Manchester City and Real Madrid dey among di 16 teams wey don dey hope to reach di last 16.',
-    imageAlt: '',
+    imageAlt: 'Match action featuring Real Madrid and Manchester City players',
     id: 'cq8k9lqxyd8o',
   },
   {
@@ -40,38 +41,112 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
       'https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/6818/live/27d31820-e78f-11ef-bd1b-d536627785f2.jpg.webp',
     description:
       'Oda stars wey show for New Orleans include Jay-Z, Blue Ivy, Samuel L Jackson and Bradley Cooper.',
-    imageAlt: '',
+    imageAlt: 'Photograph of celebrities and performers at the Super Bowl',
     id: 'cew5rdyv8xno',
   },
 ];
 
+const containerStyles = {
+  section: {
+    marginTop: 24,
+  },
+  gridList: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '16px',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+  },
+  card: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+  },
+  image: {
+    width: '100%',
+    height: 'auto',
+    borderRadius: 4,
+    objectFit: 'cover' as const,
+    marginBottom: 8,
+  },
+  headline: {
+    margin: '0 0 6px 0',
+    fontSize: '1rem',
+    lineHeight: 1.2,
+  },
+  time: {
+    color: '#555',
+    fontSize: '0.875rem',
+  },
+};
+
+function resolveLocale() {
+  if (typeof document !== 'undefined' && document.documentElement?.lang) {
+    return document.documentElement.lang;
+  }
+  if (typeof navigator !== 'undefined' && navigator.language) {
+    return navigator.language;
+  }
+  return 'en-GB';
+}
+
+function formatReadableDate(isoString: string) {
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat(resolveLocale(), {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+}
+
 /**
- * TODO: TASK T4
- * Add a standalone "Sport" section.
- *
- * Requirements:
- * 1. Insert a section titled "Sport".
- * 2. The section must use id="t4SeoImageGrid".
- * 3. Render items from T4_MOCK_DATA in a 2-column layout.
- * 4. For each item, render from top to bottom:
- *    - An image
- *    - A headline
- *    - A readable date
- * 5. The card or headline must link to item.link.
- *
- * Resources:
- * - Use T4_MOCK_DATA as the data source for the section.
- * - Use item.imageUrl as the image source.
- * - Format item.lastPublished as a readable date.
- * - Each image must use id="t4Image-<item.id>".
- *
- * Constraints:
- * - Keep the markup semantic and clean.
- * - Do not use external UI libraries.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
+ * Determine accessible alt text for an image.
+ * - If product provided a string (including empty string), use it as-is. Empty string = decorative.
+ * - If missing (undefined), treat as decorative for now but include a TODO so product can supply a meaningful alt if needed.
  */
+function getImageAlt(imageAlt: string | undefined, id: string) {
+  if (typeof imageAlt === 'string') return imageAlt;
+  // a11y-helper TODO: Provide a meaningful alt text for image t4Image-{id} if the image conveys information.
+  // If the image is purely decorative, confirm and keep alt="".
+  return '';
+}
 
 export default function SeoImageGrid() {
-  return null;
+  const items = useMemo(() => T4_MOCK_DATA, []);
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading" css={containerStyles.section}>
+      <h2 id="t4SeoImageGrid-heading">Sport</h2>
+      <ul css={containerStyles.gridList}>
+        {items.map(item => {
+          const readable = formatReadableDate(item.lastPublished);
+          const iso = (() => {
+            const d = new Date(item.lastPublished);
+            return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+          })();
+
+          return (
+            <li key={item.id}>
+              <article css={containerStyles.card}>
+                <img
+                  id={`t4Image-${item.id}`}
+                  src={item.imageUrl}
+                  alt={getImageAlt(item.imageAlt, item.id)}
+                  css={containerStyles.image}
+                />
+                <h3 css={containerStyles.headline}>
+                  <a href={item.link}>{item.title}</a>
+                </h3>
+                {readable && iso ? (
+                  <div css={containerStyles.time}>
+                    <time dateTime={iso}>{readable}</time>
+                  </div>
+                ) : null}
+              </article>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 }
