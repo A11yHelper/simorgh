@@ -45,6 +45,65 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
+const readableDateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const sectionStyles = {
+  marginBlock: '1.5rem',
+};
+
+const headingStyles = {
+  margin: '0 0 1rem',
+};
+
+const gridStyles = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '1rem',
+  listStyle: 'none',
+  margin: 0,
+  padding: 0,
+};
+
+const cardLinkStyles = {
+  display: 'block',
+  color: 'inherit',
+  textDecoration: 'none',
+};
+
+const imageStyles = {
+  display: 'block',
+  width: '100%',
+  height: 'auto',
+  aspectRatio: '16 / 9',
+  objectFit: 'cover',
+};
+
+const headlineStyles = {
+  margin: '0.75rem 0 0.5rem',
+  fontSize: '1rem',
+  lineHeight: 1.3,
+};
+
+const dateStyles = {
+  display: 'block',
+  fontSize: '0.875rem',
+  lineHeight: 1.4,
+};
+
+const formatReadableDate = (value: string) => {
+  const publishedDate = new Date(value);
+
+  if (Number.isNaN(publishedDate.getTime())) {
+    return value;
+  }
+
+  return readableDateFormatter.format(publishedDate);
+};
+
 /**
  * TODO: TASK T4
  * Add a standalone "Sport" section.
@@ -73,5 +132,39 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  */
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGrid-heading" style={sectionStyles}>
+      <h2 id="t4SeoImageGrid-heading" style={headingStyles}>
+        Sport
+      </h2>
+
+      <ul style={gridStyles}>
+        {T4_MOCK_DATA.map((item) => {
+          const imageAltText = item.imageAlt?.trim() || item.title;
+          const readableDate = formatReadableDate(item.lastPublished);
+
+          return (
+            <li key={item.id}>
+              <article>
+                <a href={item.link} style={cardLinkStyles}>
+                  <img
+                    id={`t4Image-${item.id}`}
+                    src={item.imageUrl}
+                    alt={imageAltText}
+                    loading="lazy"
+                    decoding="async"
+                    style={imageStyles}
+                  />
+                  <h3 style={headlineStyles}>{item.title}</h3>
+                  <time dateTime={item.lastPublished} style={dateStyles}>
+                    {readableDate}
+                  </time>
+                </a>
+              </article>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
 }
