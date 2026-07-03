@@ -25,8 +25,33 @@ interface TopStoriesProps {
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
 
+const formatReadableDate = (timestamp: number | string) =>
+  new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(timestamp));
+
 const TopStories = ({ data }: TopStoriesProps) => {
-  return <h1>TopStories</h1>;
+  const topStories = data.items.slice(0, 3);
+
+  return (
+    <section id="topStories" aria-labelledby="topStories-heading">
+      <h2 id="topStories-heading">Top Stories</h2>
+      <ul>
+        {topStories.map(({ id, href, title, timestamp }) => (
+          <li key={id}>
+            <a href={href}>{title}</a>
+            <div>
+              <time dateTime={new Date(timestamp).toISOString()}>
+                {formatReadableDate(timestamp)}
+              </time>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 };
 
 export default TopStories;
