@@ -45,6 +45,30 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const listStyles = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '16px',
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+};
+
+const imageStyles = {
+  display: 'block',
+  width: '100%',
+  height: 'auto',
+};
+
+const formatPublishedDate = (publishedDate: string) =>
+  dateFormatter.format(new Date(publishedDate));
+
 /**
  * TODO: TASK T4
  * Add a standalone "Sport" section.
@@ -71,7 +95,36 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
  *
  * You can preview your changes at http://localhost:7080/pidgin/popular/read
  */
-
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGridHeading">
+      <h2 id="t4SeoImageGridHeading">Sport</h2>
+
+      <ul style={listStyles}>
+        {T4_MOCK_DATA.map(item => (
+          <li key={item.id}>
+            <article>
+              {/* a11y-helper TODO: confirm descriptive alt text for each Sport image. */}
+              <img
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={item.imageAlt ?? ''}
+                style={imageStyles}
+                loading="lazy"
+                decoding="async"
+              />
+
+              <h3>
+                <a href={item.link}>{item.title}</a>
+              </h3>
+
+              <time dateTime={item.lastPublished}>
+                {formatPublishedDate(item.lastPublished)}
+              </time>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
