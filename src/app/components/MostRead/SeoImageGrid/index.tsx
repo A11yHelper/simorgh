@@ -1,4 +1,4 @@
-import React from 'react';
+import styled from '@emotion/styled';
 
 type MostReadSeoItem = {
   id: string;
@@ -45,33 +45,84 @@ export const T4_MOCK_DATA: MostReadSeoItem[] = [
   },
 ];
 
-/**
- * TODO: TASK T4
- * Add a standalone "Sport" section.
- *
- * Requirements:
- * 1. Insert a section titled "Sport".
- * 2. The section must use id="t4SeoImageGrid".
- * 3. Render items from T4_MOCK_DATA in a 2-column layout.
- * 4. For each item, render from top to bottom:
- *    - An image
- *    - A headline
- *    - A readable date
- * 5. The card or headline must link to item.link.
- *
- * Resources:
- * - Use T4_MOCK_DATA as the data source for the section.
- * - Use item.imageUrl as the image source.
- * - Format item.lastPublished as a readable date.
- * - Each image must use id="t4Image-<item.id>".
- *
- * Constraints:
- * - Keep the markup semantic and clean.
- * - Do not use external UI libraries.
- *
- * You can preview your changes at http://localhost:7080/pidgin/popular/read
- */
+const Section = styled.section({
+  marginTop: '1.5rem',
+});
+
+const Heading = styled.h2({
+  fontSize: '1.5rem',
+  lineHeight: 1.2,
+  margin: '0 0 1rem',
+});
+
+const Grid = styled.div({
+  display: 'grid',
+  gap: '1rem',
+  gridTemplateColumns: 'minmax(0, 1fr)',
+
+  '@media (min-width: 37.5rem)': {
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  },
+});
+
+const Card = styled.article({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.75rem',
+});
+
+const Image = styled.img({
+  display: 'block',
+  width: '100%',
+  height: 'auto',
+  borderRadius: '0.25rem',
+});
+
+const TitleLink = styled.a({
+  color: 'inherit',
+  textDecoration: 'none',
+
+  '&:hover, &:focus-visible': {
+    textDecoration: 'underline',
+  },
+});
+
+const Meta = styled.time({
+  color: '#5a5a5a',
+  fontSize: '0.9375rem',
+});
+
+const formatReadableDate = (value: string) =>
+  new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(value));
 
 export default function SeoImageGrid() {
-  return null;
+  return (
+    <Section id="t4SeoImageGrid" aria-labelledby="t4SeoImageGridHeading">
+      <Heading id="t4SeoImageGridHeading">Sport</Heading>
+      <Grid>
+        {T4_MOCK_DATA.map(item => {
+          const altText = item.imageAlt?.trim() || item.title;
+          const readableDate = formatReadableDate(item.lastPublished);
+
+          return (
+            <Card key={item.id}>
+              <Image
+                id={`t4Image-${item.id}`}
+                src={item.imageUrl}
+                alt={altText}
+              />
+              <div>
+                <TitleLink href={item.link}>{item.title}</TitleLink>
+              </div>
+              <Meta dateTime={item.lastPublished}>{readableDate}</Meta>
+            </Card>
+          );
+        })}
+      </Grid>
+    </Section>
+  );
 }
